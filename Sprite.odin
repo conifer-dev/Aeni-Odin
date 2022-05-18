@@ -65,6 +65,7 @@ createAnimation :: proc(animationMap: ^map[string]SpriteAnimator, animName: stri
 // Main render function for the Sprite Animation system that unlike the Swift version, will accept values from the map "anims"
 // that will hold the SpriteAnimator data which will essentially be the animation itself. We will then iterate through the map and render.
 render :: proc(animMap: ^map[string]SpriteAnimator) {
+// PURELY EXPERIMENTAL AND UNTESTED. ONLY GOD KNOWS IF THIS WILL WORK.
 	for _, anim in animMap {
 		anim.sprite.sourceRect = rl.Rectangle{f32(anim.startingFrame) * f32(anim.sprite.frameDimensions.x), f32(anim.column) * f32(anim.sprite.frameDimensions.y), f32(anim.sprite.spriteSize.x), f32(anim.sprite.spriteSize.y)}
 		anim.sprite.destRect = rl.Rectangle{anim.sprite.position.x, anim.sprite.position.x, anim.sprite.frameDimensions.x * anim.sprite.scale.x, anim.sprite.frameDimensions.y * anim.sprite.scale.y}
