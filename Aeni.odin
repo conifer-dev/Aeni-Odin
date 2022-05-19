@@ -1,12 +1,10 @@
 package aeni
 
 import rl "vendor:raylib"
-
-timeSinceStart:f32 = 0
-isAnimationFinished: bool = false
+// =============================================== Structs ========================================================= 
 
 // Sprite Type
-Sprite :: struct {
+Sprite :: struct #packed {
 	spriteSheet: rl.Texture2D,
 	frameDimensions: rl.Vector2,
 	scale: rl.Vector2,
@@ -29,7 +27,11 @@ SpriteAnimation :: struct {
 	repeatable: bool,
 	tintColour: rl.Color,
 	debugMode: bool,
+	timeSinceStart: f32,
+	isAnimationFinished: bool,
 }
+
+// =============================================== Procedures ========================================================= 
 
 // Creates and returns a Sprite based on parameters provided which will be then passed to the SpriteAnimator.
 createSprite :: proc(spriteSheet: rl.Texture2D, frameDimensions: rl.Vector2, scale: rl.Vector2, position: rl.Vector2) -> Sprite {
@@ -59,22 +61,62 @@ createAnimation :: proc(animationMap: ^map[string]SpriteAnimation, animName: str
 		repeatable,
 		tintColour,
 		debugMode,
+		0,
+		false,
 	})
 }
 
 // Main render function for the Sprite Animation system that unlike the Swift version, will accept values from the map "anims"
 // that will hold the SpriteAnimator data which will essentially be the animation itself. We will then iterate through the map and render.
-render :: proc(animMap: ^map[string]SpriteAnimation) {
+render :: proc(anim: ^SpriteAnimation) {
 
-	for _, anim in animMap {
-		anim.sprite.sourceRect = rl.Rectangle{f32(anim.startingFrame) * f32(anim.sprite.frameDimensions.x), f32(anim.column) * f32(anim.sprite.frameDimensions.y), anim.sprite.spriteSize.x, anim.sprite.spriteSize.y}
-		anim.sprite.destRect = rl.Rectangle{anim.sprite.position.x, anim.sprite.position.x, anim.sprite.frameDimensions.x * anim.sprite.scale.x, anim.sprite.frameDimensions.y * anim.sprite.scale.y}
+	// Internal sprite type rectangle assigned to renderer
+	anim.sprite.sourceRect = rl.Rectangle{f32(anim.startingFrame) * f32(anim.sprite.frameDimensions.x), f32(anim.column) * f32(anim.sprite.frameDimensions.y), anim.sprite.spriteSize.x, anim.sprite.spriteSize.y}
+	// Destination rectangle that is responsible for renbdering the position and scale of the Sprite.
+	anim.sprite.destRect = rl.Rectangle{anim.sprite.position.x, anim.sprite.position.x, anim.sprite.frameDimensions.x * anim.sprite.scale.x, anim.sprite.frameDimensions.y * anim.sprite.scale.y}
 		
-		rl.DrawTexturePro(anim.sprite.spriteSheet,
+	// Rendering the animation.
+	rl.DrawTexturePro(anim.sprite.spriteSheet,
 		anim.sprite.sourceRect,
 		anim.sprite.destRect,
 		rl.Vector2{anim.origin.x, anim.origin.y},
 		anim.rotation,
 		anim.tintColour)
+		
+	// If debugMode is enabled, we will render a box around the sprite that represents its hitbox for collision detection.
+	// Highly recommended to enable in order to find the sweet spot for your origin point... SIZE of the hitbox will have to be re-done as they do seem to be too big for now.
+	if anim.debugMode {
+		rl.DrawRectangleLines(i32(anim.sprite.position.x), i32(anim.sprite.position.y), i32(anim.sprite.destRect.width), i32(anim.sprite.destRect.height), rl.RED)
 	}
 }
+
+// Your animation goes bbrrrrrrr.
+update :: proc(dt: f32, anim: ^SpriteAnimation) {
+		
+	// Run only when  animation is not finished.
+	if !anim.isAnimationFinished {
+		anim.timeSinceStart += dt
+		anim.duration -= dt
+			
+		// Iterarte our startingFrame by one based on the speed provided.
+		if anim.timeSinceStart >= anim.animSpeed {
+			anim.timeSinceStart = 0
+			anim.startingFrame += 1
+		}
+			
+		// If our starting frame is greater than or equal to the ending frame, set it back to 0 and look through until duration reaches 0 unless animation is set as repeatable.
+		anim.startingFrame = anim.startingFrame % anim.endingFrame
+	}
+		
+	// If animation is not set as repeatable and once duration is less than or equal to 0, set animation to isFinished bool to true to end the animation.
+	if !anim.repeatable && anim.duration <= 0 {
+		anim.isAnimationFinished = true
+		anim.duration = 0
+	}
+}
+
+flipSprite :: proc(horizontal: bool, vertical: bool, anim: ^SpriteAnimation) {
+
+}
+
+// =============================================== End-Of-File =========================================================  
