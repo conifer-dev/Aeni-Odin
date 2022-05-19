@@ -115,8 +115,21 @@ update :: proc(dt: f32, anim: ^SpriteAnimation) {
 	}
 }
 
+// Flip the sprite based on directional planes.
 flipSprite :: proc(horizontal: bool, vertical: bool, anim: ^SpriteAnimation) {
+	anim.sprite.spriteSize.x = abs(anim.sprite.spriteSize.x) * (horizontal ? -1 : 1)
+	anim.sprite.spriteSize.y = abs(anim.sprite.spriteSize.y) * (vertical ? -1 : 1)
+}
 
+// hasCollided procedure require you to provide your a rectangle which in our case will be the destRect from our animation, to make it easier we went ahead and requested that
+// an SpriteAnimation is passed as a parameter which internally will take the destRect and run collision check with a rectangle. After all we're checking for rectangle collions...
+// As a second parameter you must pass another rectangle, we're requiring rl.Rectangle due to the fact that the second rectangle could be anything! Other sprite or projectile? Who knows.
+hasCollided :: proc(firstSprite: SpriteAnimation, rectangle: rl.Rectangle) -> bool {
+	if rl.CheckCollisionRecs(firstSprite.sprite.destRect, rectangle) {
+		return true	
+	} else {
+		return false
+	}
 }
 
 // =============================================== End-Of-File =========================================================  
