@@ -71,16 +71,20 @@ createAnimation :: proc(animationMap: ^map[string]SpriteAnimation, animName: str
 render :: proc(anim: ^SpriteAnimation) {
 
 	// Internal sprite type rectangle assigned to renderer
-	anim.sprite.sourceRect = rl.Rectangle{f32(anim.startingFrame) * f32(anim.sprite.frameDimensions.x), 
-	f32(anim.column) * f32(anim.sprite.frameDimensions.y), 
-	anim.sprite.spriteSize.x, 
-	anim.sprite.spriteSize.y}
-	
+	anim.sprite.sourceRect = rl.Rectangle{
+		f32(anim.startingFrame) * f32(anim.sprite.frameDimensions.x), 
+		f32(anim.column) * f32(anim.sprite.frameDimensions.y), 
+		anim.sprite.spriteSize.x, 
+		anim.sprite.spriteSize.y
+	}
+
 	// Destination rectangle that is responsible for renbdering the position and scale of the Sprite.
-	anim.sprite.destRect = rl.Rectangle{anim.sprite.position.x, 
-	anim.sprite.position.x, 
-	anim.sprite.frameDimensions.x * anim.sprite.scale.x, 
-	anim.sprite.frameDimensions.y * anim.sprite.scale.y}
+	anim.sprite.destRect = rl.Rectangle{
+		anim.sprite.position.x, 
+		anim.sprite.position.x, 
+		anim.sprite.frameDimensions.x * anim.sprite.scale.x, 
+		anim.sprite.frameDimensions.y * anim.sprite.scale.y
+	}
 		
 	// Rendering the animation.
 	rl.DrawTexturePro(anim.sprite.spriteSheet,
