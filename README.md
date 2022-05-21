@@ -7,7 +7,7 @@
 
 Aeni allows you to quickly and easily animate your spritesheet with uniform dimensions in your Raylib for Odin project! It divides the process into two simple steps to create a working animation.
 
-Aeni is a shortened word for *"aenimeisheon"* in Korean which translates to "Animation".
+*Aeni is a shortened word for *"aenimeisheon"* in Korean which translates to "Animation".*
 
 I would like to remind the potential users that this is a barebones & simplistic spritesheet animation library meant for small games, learning how to develop games with Raylib or game jams, not **professional game development.** 
 
