@@ -15,7 +15,7 @@ Instructions
 =====
 Getting Aeni set up and running is easy, firstly make sure you import it into your code:
 
-```c
+```odin
 import "aeni"
 ```
 
@@ -25,7 +25,7 @@ Once our Sprite is created, we can start animating it by passing a createAnimati
 
 Check the example below to see how to easily set it up:
 
-```c
+```odin
 package main
 
 import rl "vendor:raylib"
