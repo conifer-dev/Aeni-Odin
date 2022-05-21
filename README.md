@@ -111,4 +111,4 @@ There are many things I want to add to Aeni. If you have any suggestions on what
 
 Closing notes
 =====
-This is a port from [Aeni for Swift](https://github.com/conifer-dev/Aeni) which I will sadly no longer be working on due to the fact that Swift development outside Apples ecosystem is disastrous.
+This is a port from [Aeni for Swift](https://github.com/conifer-dev/Aeni) which I will sadly no longer be working on due to the fact that Swift development outside Apples ecosystem is disastrous. Therefore all my attention will now be diverted to Odin & Aeni-Odin!
